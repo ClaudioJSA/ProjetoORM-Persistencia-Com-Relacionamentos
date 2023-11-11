@@ -22,7 +22,10 @@ public class User extends Entity{
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws Exception {
+        if(name.length()>150 || name == null){
+            throw new Exception("O nome não pode ter mais de 150 caracteres ou ser nulo.");
+        }
         this.name = name;
     }
 
@@ -30,7 +33,10 @@ public class User extends Entity{
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws Exception {
+        if(email.length()>255 || email == null){
+            throw new Exception("O email não pode ter mais de 255 caracteres ou ser nulo.");
+        }
         this.email = email;
     }
 
@@ -38,7 +44,10 @@ public class User extends Entity{
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(LocalDate birthDate) throws Exception {
+        if(birthDate == null){
+            throw new Exception("A data de aniversario nao pode ser nula.");
+        }
         this.birthDate = birthDate;
     }
 //</editor-fold>
