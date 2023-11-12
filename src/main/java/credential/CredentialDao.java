@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package reader;
+package credential;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -19,9 +19,10 @@ import repository.Dao;
  *
  * @author Claudio Alcantara &lt;claudio.alcantara at ifnmg.edi.br&gt;
  */
-public class ReaderDao extends Dao<Reader>{
-    public final String TABLE = "reader";
-
+public class CredentialDao extends Dao<Credential>{
+    public final String TABLE = "credential";
+    private String SALT = "!asdf";
+            
     @Override
     public String getSaveStatement() {
         return "INSERT INTO " + TABLE + "(name, email, birthDate) VALUES (?, ?, ?)";
@@ -48,60 +49,65 @@ public class ReaderDao extends Dao<Reader>{
     }
 
     @Override
-    public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Reader e) {
+    public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Credential e) {
         try {
-            pstmt.setString(1, e.getName());
-            pstmt.setString(2, e.getEmail());
-            pstmt.setDate(3, Date.valueOf(e.getBirthDate()));
+            pstmt.setString(1, e.getUsername());
+            pstmt.setString(2, e.getPassword());
+            pstmt.setDate(3, Date.valueOf(e.getLastAccess()));
+            pstmt.setBoolean(4, e.isEnabled());
             
             if (e.getId() != null) {
-                pstmt.setLong(4, e.getId());
+                pstmt.setLong(5, e.getId());
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ReaderDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CredentialDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public Reader extractObject(ResultSet rs) {
-        Reader reader = new Reader();
+    public Credential extractObject(ResultSet rs) {
+        Credential credential = new Credential();
         try{
-            reader.setName(rs.getString("name"));
-            reader.setEmail(rs.getString("email"));
-            reader.setBirthDate(rs.getDate("birthdate").toLocalDate());
+            credential.setUsername(rs.getString("username"));
+            credential.setPassword(rs.getString("password"));
+            credential.setLastAccess(rs.getDate("lastAccess").toLocalDate());
+            credential.setEnabled(rs.getBoolean("enabled"));
         }catch(Exception ex){
                 System.out.println("Ex: " + ex);      
         }
-        return reader;
+        return credential;
     }
 
     @Override
-    public List<Reader> extractObjects(ResultSet rs) {
-        List<Reader> readers = new ArrayList<>();
+    public List<Credential> extractObjects(ResultSet rs) {
+        List<Credential> credentials = new ArrayList<>();
         try{
             while(rs.next()){
-                Reader reader = new Reader();
-                reader.setName(rs.getString("name"));
-                reader.setEmail(rs.getString("email"));
-                reader.setBirthDate(rs.getDate("birthdate").toLocalDate());
-                readers.add(reader);
+                Credential credential = new Credential();
+                credential.setUsername(rs.getString("username"));
+                credential.setPassword(rs.getString("password"));
+                credential.setLastAccess(rs.getDate("lastAccess").toLocalDate());
+                credential.setEnabled(rs.getBoolean("enabled"));
+                credentials.add(credential);
             }
         }catch(Exception ex){
                 System.out.println("Ex: " + ex);      
         }   
-        return readers;
+        return credentials;
     }
 
-    public ReaderDao() {
+    public CredentialDao() {
     }
 
     public String getTABLE() {
         return TABLE;
     }
 
-    public static String getDB() {
-        return DB;
+    public String getSALT() {
+        return SALT;
     }
-    
-    
+
+    public void setSALT(String SALT) {
+        this.SALT = SALT;
+    }   
 }
