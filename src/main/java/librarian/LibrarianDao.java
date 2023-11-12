@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package reader;
+package librarian;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -13,14 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import reader.ReaderDao;
 import repository.Dao;
 
 /**
  *
  * @author Claudio Alcantara &lt;claudio.alcantara at ifnmg.edi.br&gt;
  */
-public class ReaderDao extends Dao<Reader>{
-    public final String TABLE = "reader";
+public class LibrarianDao extends Dao<Librarian>{
+    public final String TABLE = "librarian";
 
     @Override
     public String getSaveStatement() {
@@ -48,7 +49,7 @@ public class ReaderDao extends Dao<Reader>{
     }
 
     @Override
-    public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Reader e) {
+    public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Librarian e) {
         try {
             pstmt.setString(1, e.getName());
             pstmt.setString(2, e.getEmail());
@@ -63,45 +64,35 @@ public class ReaderDao extends Dao<Reader>{
     }
 
     @Override
-    public Reader extractObject(ResultSet rs) {
-         Reader reader = new Reader();
+    public Librarian extractObject(ResultSet rs) {
+        Librarian librarian = new Librarian();
         try{
-            reader.setName(rs.getString("name"));
-            reader.setEmail(rs.getString("email"));
-            reader.setBirthDate(rs.getDate("birthdate").toLocalDate());
+            librarian.setName(rs.getString("name"));
+            librarian.setEmail(rs.getString("email"));
+            librarian.setBirthDate(rs.getDate("birthdate").toLocalDate());
         }catch(Exception ex){
                 System.out.println("Ex: " + ex);      
         }
-        return reader;
+        return librarian;
     }
 
     @Override
-    public List<Reader> extractObjects(ResultSet rs) {
-        List<Reader> readers = new ArrayList<>();
+    public List<Librarian> extractObjects(ResultSet rs) {
+        List<Librarian> librarians = new ArrayList<>();
         try{
             while(rs.next()){
-                Reader reader = new Reader();
-                reader.setName(rs.getString("name"));
-                reader.setEmail(rs.getString("email"));
-                reader.setBirthDate(rs.getDate("birthdate").toLocalDate());
-                readers.add(reader);
+                Librarian librarian = new Librarian();
+                librarian.setName(rs.getString("name"));
+                librarian.setEmail(rs.getString("email"));
+                librarian.setBirthDate(rs.getDate("birthdate").toLocalDate());
+                librarians.add(librarian);
             }
         }catch(Exception ex){
                 System.out.println("Ex: " + ex);      
         }   
-        return readers;
+        return librarians;
     }
-
-    public ReaderDao() {
-    }
-
-    public String getTABLE() {
-        return TABLE;
-    }
-
-    public static String getDB() {
-        return DB;
-    }
+    
     
     
 }
