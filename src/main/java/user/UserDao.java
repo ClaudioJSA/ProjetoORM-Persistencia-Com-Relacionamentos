@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import repository.Dao;
+import role.Role;
 
 /**
  *
@@ -24,22 +25,22 @@ public class UserDao extends Dao<User>{
     
     @Override
     public String getSaveStatement() {
-        return "INSERT INTO " + TABLE + "(name, email, birthDate) VALUES (?, ?, ?)";
+        return "INSERT INTO " + TABLE + "(name, email, birthDate, user) VALUES (?, ?, ?, ?)";
     }
 
     @Override
     public String getUpdateStatement() {
-        return "UPDATE " + TABLE + " SET name = ?, email = ?, birthDate = ? WHERE id = ?";
+        return "UPDATE " + TABLE + " SET name = ?, email = ?, birthDate = ?, user = ? WHERE id = ?";
     }
 
     @Override
     public String getFindByIdStatement() {
-        return "SELECT name, email, birthDate FROM " + TABLE + " WHERE id = ?";
+        return "SELECT name, email, birthDate, user FROM " + TABLE + " WHERE id = ?";
     }
 
     @Override
     public String getFindAllStatement() {
-        return "SELECT name, email, birthDate FROM " + TABLE;
+        return "SELECT name, email, user birthDate FROM " + TABLE;
     }
 
     @Override
@@ -53,9 +54,10 @@ public class UserDao extends Dao<User>{
             pstmt.setString(1, e.getName());
             pstmt.setString(2, e.getEmail());
             pstmt.setDate(3, Date.valueOf(e.getBirthDate()));
+            pstmt.setLong(4, e.getRole().getId());
             
             if (e.getId() != null) {
-                pstmt.setLong(4, e.getId());
+                pstmt.setLong(5, e.getId());
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -65,10 +67,13 @@ public class UserDao extends Dao<User>{
     @Override
     public User extractObject(ResultSet rs) {
         User user = new User();
+        Role role = new Role();
         try{
             user.setName(rs.getString("name"));
             user.setEmail(rs.getString("email"));
             user.setBirthDate(rs.getDate("birthdate").toLocalDate());
+            role.setId(rs.getLong("role"));
+            user.setRole(role);
         }catch(Exception ex){
                 System.out.println("Ex: " + ex);      
         }
@@ -81,9 +86,12 @@ public class UserDao extends Dao<User>{
         try{
             while(rs.next()){
                 User user = new User();
+                Role role = new Role();
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
                 user.setBirthDate(rs.getDate("birthdate").toLocalDate());
+                role.setId(rs.getLong("role"));
+                user.setRole(role);
                 users.add(user);
             }
         }catch(Exception ex){

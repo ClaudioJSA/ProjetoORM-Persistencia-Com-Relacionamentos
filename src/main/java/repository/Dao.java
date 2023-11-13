@@ -66,7 +66,7 @@ public abstract class Dao<E> implements IDao<E>{
     }
 
     @Override
-    public List<E> fidAll() {
+    public List<E> findAll() {
         try ( PreparedStatement pstsmt = DbConnection.getConnection().prepareStatement(getFindAllStatement())) {
             System.out.println(pstsmt);
             ResultSet resultSet = pstsmt.executeQuery();

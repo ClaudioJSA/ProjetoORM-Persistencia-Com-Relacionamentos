@@ -24,22 +24,22 @@ public class ReaderDao extends Dao<Reader>{
 
     @Override
     public String getSaveStatement() {
-        return "INSERT INTO " + TABLE + "(name, email, birthDate) VALUES (?, ?, ?)";
+        return "INSERT INTO " + TABLE + "(id) VALUES (?)";
     }
 
     @Override
     public String getUpdateStatement() {
-        return "UPDATE " + TABLE + " SET name = ?, email = ?, birthDate = ? WHERE id = ?";
+        return "UPDATE " + TABLE + " SET id = ? WHERE id = ?";
     }
 
     @Override
     public String getFindByIdStatement() {
-        return "SELECT name, email, birthDate FROM " + TABLE + " WHERE id = ?";
+        return "SELECT id FROM " + TABLE + " WHERE id = ?";
     }
 
     @Override
     public String getFindAllStatement() {
-        return "SELECT name, email, birthDate FROM " + TABLE;
+        return "SELECT id FROM " + TABLE;
     }
 
     @Override
@@ -50,12 +50,9 @@ public class ReaderDao extends Dao<Reader>{
     @Override
     public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Reader e) {
         try {
-            pstmt.setString(1, e.getName());
-            pstmt.setString(2, e.getEmail());
-            pstmt.setDate(3, Date.valueOf(e.getBirthDate()));
-            
+            pstmt.setLong(1, e.getId());
             if (e.getId() != null) {
-                pstmt.setLong(4, e.getId());
+                pstmt.setLong(2, e.getId());
             }
         } catch (SQLException ex) {
             Logger.getLogger(ReaderDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,9 +63,7 @@ public class ReaderDao extends Dao<Reader>{
     public Reader extractObject(ResultSet rs) {
         Reader reader = new Reader();
         try{
-            reader.setName(rs.getString("name"));
-            reader.setEmail(rs.getString("email"));
-            reader.setBirthDate(rs.getDate("birthdate").toLocalDate());
+            reader.setId(rs.getLong("id"));
         }catch(Exception ex){
                 System.out.println("Ex: " + ex);      
         }
@@ -81,9 +76,7 @@ public class ReaderDao extends Dao<Reader>{
         try{
             while(rs.next()){
                 Reader reader = new Reader();
-                reader.setName(rs.getString("name"));
-                reader.setEmail(rs.getString("email"));
-                reader.setBirthDate(rs.getDate("birthdate").toLocalDate());
+                reader.setId(rs.getLong("id"));
                 readers.add(reader);
             }
         }catch(Exception ex){

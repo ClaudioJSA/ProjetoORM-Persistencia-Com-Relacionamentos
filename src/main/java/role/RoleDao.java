@@ -50,9 +50,8 @@ public class RoleDao extends Dao<Role>{
     public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Role e) {
         try {
             pstmt.setString(1, e.getName());
-            
             if (e.getId() != null) {
-                pstmt.setLong(4, e.getId());
+                pstmt.setLong(2, e.getId());
             }
         } catch (SQLException ex) {
             Logger.getLogger(RoleDao.class.getName()).log(Level.SEVERE, null, ex);

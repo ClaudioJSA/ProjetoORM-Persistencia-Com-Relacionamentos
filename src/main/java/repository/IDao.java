@@ -27,7 +27,7 @@ public interface IDao<E>{
     public List<E> extractObjects(ResultSet rs);
     public Long saveOrUpdate(E e);
     public E findById(Long id);
-    public List<E> fidAll();
+    public List<E> findAll();
     public void delete(Long id);
             
 }

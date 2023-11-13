@@ -5,7 +5,6 @@
  */
 package librarian;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,22 +24,22 @@ public class LibrarianDao extends Dao<Librarian>{
 
     @Override
     public String getSaveStatement() {
-        return "INSERT INTO " + TABLE + "(name, email, birthDate) VALUES (?, ?, ?)";
+        return "INSERT INTO " + TABLE + "(id) VALUES (?)";
     }
 
     @Override
     public String getUpdateStatement() {
-        return "UPDATE " + TABLE + " SET name = ?, email = ?, birthDate = ? WHERE id = ?";
+        return "UPDATE " + TABLE + " SET id = ? WHERE id = ?";
     }
 
     @Override
     public String getFindByIdStatement() {
-        return "SELECT name, email, birthDate FROM " + TABLE + " WHERE id = ?";
+        return "SELECT id FROM " + TABLE + " WHERE id = ?";
     }
 
     @Override
     public String getFindAllStatement() {
-        return "SELECT name, email, birthDate FROM " + TABLE;
+        return "SELECT id FROM " + TABLE;
     }
 
     @Override
@@ -51,12 +50,9 @@ public class LibrarianDao extends Dao<Librarian>{
     @Override
     public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Librarian e) {
         try {
-            pstmt.setString(1, e.getName());
-            pstmt.setString(2, e.getEmail());
-            pstmt.setDate(3, Date.valueOf(e.getBirthDate()));
-            
+            pstmt.setLong(1, e.getId());
             if (e.getId() != null) {
-                pstmt.setLong(4, e.getId());
+                pstmt.setLong(2, e.getId());
             }
         } catch (SQLException ex) {
             Logger.getLogger(ReaderDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,9 +63,7 @@ public class LibrarianDao extends Dao<Librarian>{
     public Librarian extractObject(ResultSet rs) {
         Librarian librarian = new Librarian();
         try{
-            librarian.setName(rs.getString("name"));
-            librarian.setEmail(rs.getString("email"));
-            librarian.setBirthDate(rs.getDate("birthdate").toLocalDate());
+            librarian.setId(rs.getLong("id"));
         }catch(Exception ex){
                 System.out.println("Ex: " + ex);      
         }
@@ -82,9 +76,7 @@ public class LibrarianDao extends Dao<Librarian>{
         try{
             while(rs.next()){
                 Librarian librarian = new Librarian();
-                librarian.setName(rs.getString("name"));
-                librarian.setEmail(rs.getString("email"));
-                librarian.setBirthDate(rs.getDate("birthdate").toLocalDate());
+                librarian.setId(rs.getLong("id"));
                 librarians.add(librarian);
             }
         }catch(Exception ex){

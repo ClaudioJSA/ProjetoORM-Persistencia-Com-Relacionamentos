@@ -5,8 +5,10 @@
  */
 package user;
 
+import credential.Credential;
 import entity.Entity;
 import java.time.LocalDate;
+import role.Role;
 
 /**
  *
@@ -16,6 +18,8 @@ public class User extends Entity{
     private String name;
     private String email;
     private LocalDate birthDate;
+    private Credential credentical;
+    private Role role;
 
 //<editor-fold defaultstate="collapsed" desc="Getters e Setters">
     public String getName() {
@@ -50,6 +54,24 @@ public class User extends Entity{
         }
         this.birthDate = birthDate;
     }
+
+    public Credential getCredentical() {
+        return credentical;
+    }
+
+    public void setCredentical(Credential credentical) {
+        this.credentical = credentical;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+    
+    
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="Contructors">

@@ -7,6 +7,8 @@ package credential;
 
 import entity.Entity;
 import java.time.LocalDate;
+import java.util.Objects;
+import user.User;
 
 /**
  *
@@ -17,6 +19,7 @@ public class Credential extends Entity{
     private String password;
     private LocalDate lastAccess;
     private boolean enabled;
+    private User user;
 
 //<editor-fold defaultstate="collapsed" desc="Getters e Setters">
     public String getUsername() {
@@ -56,7 +59,32 @@ public class Credential extends Entity{
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+    
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 //</editor-fold>
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Credential) {
+            Credential otherCredential = (Credential) obj;
+            return this.username.equals(otherCredential.username) && this.password.equals(otherCredential.password);
+          }
+    return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.username);
+        hash = 47 * hash + Objects.hashCode(this.password);
+        return hash;
+    }
 
     public Credential() {
         enabled = true;
