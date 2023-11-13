@@ -5,6 +5,7 @@
  */
 package credential;
 
+import java.security.MessageDigest;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,22 +30,22 @@ public class CredentialDao extends Dao<Credential>{
             
     @Override
     public String getSaveStatement() {
-        return "INSERT INTO " + TABLE + "(name, email, birthDate, user) VALUES (?, ?, ?, ?)";
+        return "INSERT INTO " + TABLE + "(username, email, birthDate, user) VALUES (?, ?, ?, ?)";
     }
 
     @Override
     public String getUpdateStatement() {
-        return "UPDATE " + TABLE + " SET name = ?, email = ?, birthDate = ?, user = ? WHERE id = ?";
+        return "UPDATE " + TABLE + " SET username = ?, email = ?, birthDate = ?, user = ? WHERE id = ?";
     }
 
     @Override
     public String getFindByIdStatement() {
-        return "SELECT name, email, birthDate, user FROM " + TABLE + " WHERE id = ?";
+        return "SELECT username, email, birthDate, user FROM " + TABLE + " WHERE id = ?";
     }
 
     @Override
     public String getFindAllStatement() {
-        return "SELECT name, email, birthDate, user FROM " + TABLE;
+        return "SELECT username, email, birthDate, user FROM " + TABLE;
     }
 
     @Override
@@ -106,12 +107,20 @@ public class CredentialDao extends Dao<Credential>{
     }
     
     public User authenticate(Credential credential){
-        try(PreparedStatement pstmt = DbConnection.getConnection().prepareStatement("SELECT name, email, birthDate, user FROM " + TABLE + " WHERE username = ?")){
+        try(PreparedStatement pstmt = DbConnection.getConnection().prepareStatement("SELECT id, username, password, lastAccess, enabled, user FROM " + TABLE +" WHERE username = ?")){
             pstmt.setString(1, credential.getUsername());
             ResultSet resultSet = pstmt.executeQuery();
             if(resultSet.next()){
-                if(credential.getUsername().equals(resultSet.getString("username"))){
-                    return new UserDao().findById(resultSet.getLong("user"));
+                Credential auxCredential = extractObject(resultSet);
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update((credential.getPassword() + SALT).getBytes());
+                byte[] hash = md.digest();
+                String senhaMd5 = String.format("%032x", new java.math.BigInteger(1, hash));
+                if(senhaMd5.equals(auxCredential.getPassword())){
+                    credential.setId(resultSet.getLong("id"));
+                    credential.setEnabled(auxCredential.isEnabled());
+                    credential.setLastAccess(auxCredential.getLastAccess());
+                    return new UserDao().findById(auxCredential.getUser().getId());
                 }
             }
         return null;
