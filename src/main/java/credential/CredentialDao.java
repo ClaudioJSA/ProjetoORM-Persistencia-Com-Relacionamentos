@@ -5,7 +5,9 @@
  */
 package credential;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,7 +59,10 @@ public class CredentialDao extends Dao<Credential>{
     public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Credential e) {
         try {
             pstmt.setString(1, e.getUsername());
-            pstmt.setString(2, e.getPassword());
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update((e.getPassword() + SALT).getBytes());
+            byte[] hash = md.digest();           
+            pstmt.setString(2, String.format("%032x", new BigInteger(1, hash)));
             pstmt.setDate(3, Date.valueOf(e.getLastAccess()));
             pstmt.setBoolean(4, e.isEnabled());
             pstmt.setLong(5, e.getUser().getId());
@@ -65,8 +70,8 @@ public class CredentialDao extends Dao<Credential>{
             if (e.getId() != null) {
                 pstmt.setLong(6, e.getId());
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(CredentialDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException | SQLException ex) {
+            System.out.println(ex);
         }
     }
 
@@ -115,7 +120,7 @@ public class CredentialDao extends Dao<Credential>{
                 MessageDigest md = MessageDigest.getInstance("MD5");
                 md.update((credential.getPassword() + SALT).getBytes());
                 byte[] hash = md.digest();
-                String senhaMd5 = String.format("%032x", new java.math.BigInteger(1, hash));
+                String senhaMd5 = String.format("%032x", new BigInteger(1, hash));
                 if(senhaMd5.equals(auxCredential.getPassword())){
                     credential.setId(resultSet.getLong("id"));
                     credential.setEnabled(auxCredential.isEnabled());
