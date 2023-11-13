@@ -5,12 +5,15 @@
  */
 package br.edu.ifnmg.hellojava.projetoorm.persistencia.com.relacionamentos;
 
+import test.TestCrud;
+
 /**
  *
  * @author Claudio Alcantara &lt;claudio.alcantara at ifnmg.edi.br&gt;
  */
 public class ProjetoOrmPersistenciaComRelacionamentos {
     public static void main(String[] args) {
+        TestCrud.testeA();
         
     }
 }

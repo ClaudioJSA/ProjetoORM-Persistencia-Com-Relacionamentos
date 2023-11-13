@@ -29,7 +29,7 @@ public class LibrarianDao extends Dao<Librarian>{
 
     @Override
     public String getUpdateStatement() {
-        return "UPDATE " + TABLE + " SET id = ? WHERE id = ?";
+        return "INSERT INTO " + TABLE + "(id) VALUES (?)";
     }
 
     @Override
@@ -51,9 +51,6 @@ public class LibrarianDao extends Dao<Librarian>{
     public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Librarian e) {
         try {
             pstmt.setLong(1, e.getId());
-            if (e.getId() != null) {
-                pstmt.setLong(2, e.getId());
-            }
         } catch (SQLException ex) {
             Logger.getLogger(ReaderDao.class.getName()).log(Level.SEVERE, null, ex);
         }

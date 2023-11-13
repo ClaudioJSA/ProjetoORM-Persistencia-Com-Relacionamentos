@@ -10,7 +10,7 @@
 
 CREATE TABLE credential(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(15) NOT NULL,
+    username VARCHAR(15) NOT NULL UNIQUE,
     password VARCHAR(32) NOT NULL,
     lastAccess DATE,
     enabled BOOLEAN,
@@ -27,7 +27,7 @@ CREATE TABLE user(
 
 CREATE TABLE role(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(20) NOT NULL,
+    name VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE reader(

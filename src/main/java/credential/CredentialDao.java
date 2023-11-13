@@ -30,12 +30,12 @@ public class CredentialDao extends Dao<Credential>{
             
     @Override
     public String getSaveStatement() {
-        return "INSERT INTO " + TABLE + "(username, email, birthDate, user) VALUES (?, ?, ?, ?)";
+        return "INSERT INTO " + TABLE + "(username, password, lastaccess, enabled, user) VALUES (?, ?, ?, ?, ?)";
     }
 
     @Override
     public String getUpdateStatement() {
-        return "UPDATE " + TABLE + " SET username = ?, email = ?, birthDate = ?, user = ? WHERE id = ?";
+        return "UPDATE " + TABLE + " SET username = ?, password = ?, lastaccess = ?, enabled = ?, user = ? WHERE id = ?";
     }
 
     @Override
@@ -63,8 +63,10 @@ public class CredentialDao extends Dao<Credential>{
             pstmt.setString(2, String.format("%032x", new BigInteger(1, hash)));
             pstmt.setDate(3, Date.valueOf(e.getLastAccess()));
             pstmt.setBoolean(4, e.isEnabled());
-            pstmt.setLong(5, e.getUser().getId());
-            
+            if(e.getUser().getId() != null)
+                pstmt.setLong(5, e.getUser().getId());
+            else
+                pstmt.setNull(5, 0);
             if (e.getId() != null) {
                 pstmt.setLong(6, e.getId());
             }
@@ -123,6 +125,7 @@ public class CredentialDao extends Dao<Credential>{
                     credential.setId(resultSet.getLong("id"));
                     credential.setEnabled(auxCredential.isEnabled());
                     credential.setLastAccess(auxCredential.getLastAccess());
+                    credential.setUser(auxCredential.getUser());
                     return new UserDao().findById(auxCredential.getUser().getId());
                 }
             }
@@ -147,4 +150,6 @@ public class CredentialDao extends Dao<Credential>{
     public void setSALT(String SALT) {
         this.SALT = SALT;
     }   
+    
+    
 }

@@ -59,7 +59,7 @@ public class User extends Entity{
         return credentical;
     }
 
-    public void setCredentical(Credential credentical) {
+    public void setCredential(Credential credentical) {
         this.credentical = credentical;
     }
 
@@ -77,5 +77,21 @@ public class User extends Entity{
 //<editor-fold defaultstate="collapsed" desc="Contructors">
     public User() {
     } 
+
+    public User(String name, String email, LocalDate birthDate, Credential credentical, Role role) {
+        this.name = name;
+        this.email = email;
+        this.birthDate = birthDate;
+        this.credentical = credentical;
+        this.role = role;
+    }
+
 //</editor-fold>
+
+    @Override
+    public String toString() {
+        return "User{" + "name=" + name + ", email=" + email + ", birthDate=" + birthDate + ", credentical=" + credentical + ", role=" + role + '}';
+    }
+    
+    
 }

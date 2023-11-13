@@ -31,4 +31,9 @@ public class Role extends Entity{
         this.name = name;
     }
 //</editor-fold>
+
+    @Override
+    public String toString() {
+        return "Role{" + "name=" + name + '}';
+    }
 }

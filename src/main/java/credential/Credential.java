@@ -88,5 +88,17 @@ public class Credential extends Entity{
 
     public Credential() {
         enabled = true;
-    } 
+    }
+
+    public Credential(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Credential{" + "username=" + username + ", password=" + password + ", lastAccess=" + lastAccess + ", enabled=" + enabled + ", user=" + user.getId() + '}';
+    }
+    
+    
 }   

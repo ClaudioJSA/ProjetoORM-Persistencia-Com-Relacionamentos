@@ -25,17 +25,17 @@ public class UserDao extends Dao<User>{
     
     @Override
     public String getSaveStatement() {
-        return "INSERT INTO " + TABLE + "(name, email, birthDate, user) VALUES (?, ?, ?, ?)";
+        return "INSERT INTO " + TABLE + "(name, email, birthDate, role) VALUES (?, ?, ?, ?)";
     }
 
     @Override
     public String getUpdateStatement() {
-        return "UPDATE " + TABLE + " SET name = ?, email = ?, birthDate = ?, user = ? WHERE id = ?";
+        return "UPDATE " + TABLE + " SET name = ?, email = ?, birthDate = ?, role = ? WHERE id = ?";
     }
 
     @Override
     public String getFindByIdStatement() {
-        return "SELECT name, email, birthDate, user FROM " + TABLE + " WHERE id = ?";
+        return "SELECT name, email, birthDate, role FROM " + TABLE + " WHERE id = ?";
     }
 
     @Override
@@ -54,8 +54,10 @@ public class UserDao extends Dao<User>{
             pstmt.setString(1, e.getName());
             pstmt.setString(2, e.getEmail());
             pstmt.setDate(3, Date.valueOf(e.getBirthDate()));
-            pstmt.setLong(4, e.getRole().getId());
-            
+            if(e.getRole() != null && e.getRole().getId() != null)
+                pstmt.setLong(4, e.getRole().getId());
+            else
+                pstmt.setNull(4, 0);
             if (e.getId() != null) {
                 pstmt.setLong(5, e.getId());
             }
