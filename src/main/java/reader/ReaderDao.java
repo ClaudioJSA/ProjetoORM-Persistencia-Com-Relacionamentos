@@ -29,7 +29,7 @@ public class ReaderDao extends Dao<Reader>{
 
     @Override
     public String getUpdateStatement() {
-        return "UPDATE " + TABLE + " SET id = ? WHERE id = ?";
+        return "INSERT INTO " + TABLE + "(id) VALUES (?)";
     }
 
     @Override
@@ -51,9 +51,7 @@ public class ReaderDao extends Dao<Reader>{
     public void coposeSaveOrUpdateStatement(PreparedStatement pstmt, Reader e) {
         try {
             pstmt.setLong(1, e.getId());
-            if (e.getId() != null) {
-                pstmt.setLong(2, e.getId());
-            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(ReaderDao.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -5,6 +5,8 @@
  */
 package user;
 
+import credential.Credential;
+import credential.CredentialDao;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +16,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import repository.Dao;
-import role.Role;
+import repository.DbConnection;
+import role.RoleDao;
 
 /**
  *
@@ -35,7 +38,7 @@ public class UserDao extends Dao<User>{
 
     @Override
     public String getFindByIdStatement() {
-        return "SELECT name, email, birthDate, role FROM " + TABLE + " WHERE id = ?";
+        return "SELECT id, name, email, birthDate, role FROM " + TABLE + " WHERE id = ?";
     }
 
     @Override
@@ -69,13 +72,11 @@ public class UserDao extends Dao<User>{
     @Override
     public User extractObject(ResultSet rs) {
         User user = new User();
-        Role role = new Role();
         try{
             user.setName(rs.getString("name"));
             user.setEmail(rs.getString("email"));
             user.setBirthDate(rs.getDate("birthdate").toLocalDate());
-            role.setId(rs.getLong("role"));
-            user.setRole(role);
+            user.setRole(new RoleDao().findById(rs.getLong("role")));
         }catch(Exception ex){
                 System.out.println("Ex: " + ex);      
         }
@@ -88,12 +89,10 @@ public class UserDao extends Dao<User>{
         try{
             while(rs.next()){
                 User user = new User();
-                Role role = new Role();
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
                 user.setBirthDate(rs.getDate("birthdate").toLocalDate());
-                role.setId(rs.getLong("role"));
-                user.setRole(role);
+                user.setRole(new RoleDao().findById(rs.getLong("role")));
                 users.add(user);
             }
         }catch(Exception ex){

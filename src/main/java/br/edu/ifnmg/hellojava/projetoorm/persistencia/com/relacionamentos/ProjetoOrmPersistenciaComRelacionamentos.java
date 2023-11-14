@@ -13,7 +13,10 @@ import test.TestCrud;
  */
 public class ProjetoOrmPersistenciaComRelacionamentos {
     public static void main(String[] args) {
-        TestCrud.testeA();
-        
+//        TestCrud.testeA();
+//        TestCrud.testeB();
+//        TestCrud.testeC();
+//        TestCrud.testeD();
+        TestCrud.testeE();
     }
 }

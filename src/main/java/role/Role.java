@@ -17,6 +17,11 @@ public class Role extends Entity{
 //<editor-fold defaultstate="collapsed" desc="Contructors">
     public Role() {
     }
+
+    public Role(String name) {
+        this.name = name;
+    }
+    
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="Getters e Setters">
