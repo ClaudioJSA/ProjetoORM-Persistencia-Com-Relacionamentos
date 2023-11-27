@@ -29,7 +29,7 @@ public class LibrarianDao extends Dao<Librarian>{
 
     @Override
     public String getUpdateStatement() {
-        return "INSERT INTO TABLE (id) VALUES (?) ON DUPLICATE KEY UPDATE id = COALESCE(?, id)";
+        return "INSERT INTO "+ TABLE +"(id) VALUES (?) ON DUPLICATE KEY UPDATE id = VALUES(?)";
     }
 
     @Override

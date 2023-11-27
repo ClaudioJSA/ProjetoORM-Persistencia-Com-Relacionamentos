@@ -19,7 +19,7 @@ import java.util.List;
  */
 public abstract class Dao<E> implements IDao<E>{
     
-    public static final String DB = "projetoormpersistenciacomrelacionamentos";
+    public static final String DB = "projetopoo";
 
     @Override
     public Long saveOrUpdate(E e) {

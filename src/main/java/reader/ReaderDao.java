@@ -28,7 +28,7 @@ public class ReaderDao extends Dao<Reader>{
 
     @Override
     public String getUpdateStatement() {
-        return "INSERT INTO TABLE (id) VALUES (?) ON DUPLICATE KEY UPDATE id = COALESCE(?, id)";
+        return "INSERT INTO "+ TABLE +"(id) VALUES (?) ON DUPLICATE KEY UPDATE id = VALUES(?)";
     }
 
     @Override
